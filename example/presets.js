@@ -6,7 +6,7 @@ module.exports = {
     },
     keystore: undefined,
     authorization_params: {
-      scope: 'openid phone',
+      scope: 'openid profile email',
     },
   },
   with_refresh: {
@@ -16,7 +16,7 @@ module.exports = {
     },
     keystore: undefined,
     authorization_params: {
-      scope: 'openid phone offline_access',
+      scope: 'openid profile offline',
       prompt: 'consent',
     },
   },

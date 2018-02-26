@@ -97,10 +97,11 @@ module.exports = (issuer) => {
     const metadata = Object.assign({
       post_logout_redirect_uris: [url.resolve(ctx.href, '/')],
       redirect_uris: [url.resolve(ctx.href, '/cb')],
+      client_id: 'club-management',
+      client_secret: '1234567890',
     }, preset.registration);
-
-    const client = await issuer.Client.register(metadata, keystore);
-    client.CLOCK_TOLERANCE = 5;
+    const client = await new issuer.Client(metadata, keystore);
+    client.CLOCK_TOLERANCE = 5000;
     CLIENTS.set(ctx.session.id, client);
     ctx.session.authorization_params = preset.authorization_params;
 
@@ -140,8 +141,13 @@ module.exports = (issuer) => {
         tokens.access_token ? client.revoke(tokens.access_token, 'access_token') : undefined,
         tokens.refresh_token ? client.revoke(tokens.refresh_token, 'refresh_token') : undefined,
       ]);
-    } catch (err) {}
+    } catch (err) { }
 
+
+    // TODO: ??
+    // Tried adding `end_session_endpoint: 'http://92da5ddc.ngrok.io/oauth2/revoke',` to the issuer object
+    // but got `Method Not Allowed` from hydra
+    // Could clear session for app???
     ctx.redirect(url.format(Object.assign(url.parse(issuer.end_session_endpoint), {
       search: null,
       query: {

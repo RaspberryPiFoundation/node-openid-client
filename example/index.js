@@ -3,16 +3,23 @@
 const { Issuer } = require('..');
 
 const {
-  ISSUER = 'https://guarded-cliffs-8635.herokuapp.com',
-  PORT = 3001,
+  ISSUER = 'http://localhost:9000',
+  PORT = 3333,
 } = process.env;
 
 const appFactory = require('./app');
 
-Issuer.discover(ISSUER).then((issuer) => {
-  const app = appFactory(issuer);
-  app.listen(PORT);
-}).catch((err) => {
-  console.error(err); // eslint-disable-line no-console
-  process.exit(1);
+
+const issuer = new Issuer({
+
+  issuer: `${ISSUER}`,
+  authorization_endpoint: `${ISSUER}/oauth2/auth`,
+  token_endpoint: `${ISSUER}/oauth2/token`,
+  introspection_endpoint: `${ISSUER}/oauth2/introspect`,
+  userinfo_endpoint: `${ISSUER}/userinfo`,
+  jwks_uri: `${ISSUER}/keys/hydra.openid.id-token/public`,
 });
+
+
+const app = appFactory(issuer);
+app.listen(PORT);
