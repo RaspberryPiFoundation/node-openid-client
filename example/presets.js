@@ -28,7 +28,7 @@ module.exports = {
     keystore: undefined,
     authorization_params: {
       scope: 'openid',
-      response_type: 'id_token token',
+      response_type: 'token id_token',
       response_mode: 'form_post',
       claims: { id_token: { email_verified: null } },
     },
@@ -50,7 +50,7 @@ module.exports = {
       grant_types: ['authorization_code'],
       response_types: ['code'],
       token_endpoint_auth_method: 'private_key_jwt',
-      token_endpoint_auth_signing_alg: 'ES256',
+      token_endpoint_auth_signing_alg: 'RS256',
     },
     keystore: ['EC', 'P-256'],
   },
@@ -66,7 +66,7 @@ module.exports = {
     registration: {
       grant_types: ['authorization_code'],
       response_types: ['code'],
-      id_token_encrypted_response_alg: 'RSA1_5',
+      id_token_encrypted_response_alg: 'RS256',
     },
     keystore: ['RSA', 2048],
   },
@@ -79,10 +79,13 @@ module.exports = {
   },
   userinfo_signed_encrypted: {
     registration: {
-      grant_types: ['authorization_code'],
+      grant_types: ['authorization_code', 'refresh_token'],
       response_types: ['code'],
       userinfo_encrypted_response_alg: 'ECDH-ES+A128KW',
       userinfo_signed_response_alg: 'RS256',
+    },
+    authorization_params: {
+      scope: 'openid profile email',
     },
     keystore: ['EC', 'P-256'],
   },
